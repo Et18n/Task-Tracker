@@ -234,10 +234,18 @@ function loadState() {
 }
 
 function createTodoId() {
+  if (window.crypto?.randomUUID) {
+    return window.crypto.randomUUID();
+  }
+
   return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
 
 function deleteTodo(todoId) {
+  if (removingTodoIds.has(todoId)) {
+    return;
+  }
+
   removingTodoIds.add(todoId);
   renderTodos();
 

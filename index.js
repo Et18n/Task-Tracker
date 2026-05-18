@@ -11,6 +11,7 @@ const filterButtons = document.querySelectorAll(".filter_btn");
 const clearCompletedButton = document.getElementById("clear_completed_btn");
 
 let { todos: allTodos, filter: currentFilter } = loadState();
+const removingTodoIds = new Set();
 
 renderTodos();
 
@@ -41,6 +42,7 @@ function addTodo() {
   }
 
   allTodos.push({
+    id: createTodoId(),
     text: todoText,
     completed: false,
   });
@@ -54,16 +56,12 @@ function addTodo() {
 function renderTodos(options = {}) {
   todoList.innerHTML = "";
 
-  allTodos.forEach((todo, todoIndex) => {
+  allTodos.forEach((todo) => {
     if (!shouldRenderTodo(todo)) {
       return;
     }
 
-    const todoItem = createTodoItem(
-      todo,
-      todoIndex,
-      shouldAnimateTodo(todoIndex, options.animateLastItem)
-    );
+    const todoItem = createTodoItem(todo, shouldAnimateTodo(todo.id, options.animateLastItem));
     todoList.append(todoItem);
   });
 
@@ -72,19 +70,24 @@ function renderTodos(options = {}) {
   updateEmptyState();
 }
 
-function createTodoItem(todo, todoIndex, shouldAnimate = false) {
+function createTodoItem(todo, shouldAnimate = false) {
   const todoItem = document.createElement("li");
-  const todoId = `todo-${todoIndex}`;
+  const todoId = `todo-${todo.id}`;
+  const isRemoving = removingTodoIds.has(todo.id);
 
   todoItem.className = "todo";
   if (shouldAnimate) {
     todoItem.classList.add("todo--enter");
+  }
+  if (isRemoving) {
+    todoItem.classList.add("todo--removing");
   }
 
   const checkbox = document.createElement("input");
   checkbox.type = "checkbox";
   checkbox.id = todoId;
   checkbox.checked = todo.completed;
+  checkbox.disabled = isRemoving;
 
   const customCheckbox = document.createElement("label");
   customCheckbox.className = "custom_checkbox";
@@ -110,6 +113,7 @@ function createTodoItem(todo, todoIndex, shouldAnimate = false) {
   deleteButton.className = "delete_btn";
   deleteButton.type = "button";
   deleteButton.setAttribute("aria-label", `Delete ${todo.text}`);
+  deleteButton.disabled = isRemoving;
   deleteButton.innerHTML = `
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -125,13 +129,18 @@ function createTodoItem(todo, todoIndex, shouldAnimate = false) {
   `;
 
   checkbox.addEventListener("change", () => {
-    allTodos[todoIndex].completed = checkbox.checked;
+    const currentTodo = allTodos.find((item) => item.id === todo.id);
+    if (!currentTodo) {
+      return;
+    }
+
+    currentTodo.completed = checkbox.checked;
     saveState();
     renderTodos();
   });
 
   deleteButton.addEventListener("click", () => {
-    deleteTodo(todoIndex, todoItem);
+    deleteTodo(todo.id);
   });
 
   todoItem.append(checkbox, customCheckbox, todoText, deleteButton);
@@ -150,12 +159,12 @@ function shouldRenderTodo(todo) {
   return true;
 }
 
-function shouldAnimateTodo(todoIndex, animateLastItem) {
+function shouldAnimateTodo(todoId, animateLastItem) {
   if (!animateLastItem || currentFilter === "completed") {
     return false;
   }
 
-  return todoIndex === allTodos.length - 1;
+  return todoId === allTodos[allTodos.length - 1]?.id;
 }
 
 function updateSummary() {
@@ -210,6 +219,7 @@ function loadState() {
 
     return {
       todos: todos.filter((todo) => todo && typeof todo.text === "string").map((todo) => ({
+        id: typeof todo.id === "string" && todo.id ? todo.id : createTodoId(),
         text: todo.text,
         completed: Boolean(todo.completed),
       })),
@@ -223,11 +233,17 @@ function loadState() {
   }
 }
 
-function deleteTodo(todoIndex, todoElement) {
-  todoElement.classList.add("todo--removing");
+function createTodoId() {
+  return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
+function deleteTodo(todoId) {
+  removingTodoIds.add(todoId);
+  renderTodos();
 
   setTimeout(() => {
-    allTodos = allTodos.filter((_, index) => index !== todoIndex);
+    removingTodoIds.delete(todoId);
+    allTodos = allTodos.filter((todo) => todo.id !== todoId);
     saveState();
     renderTodos();
   }, TODO_ANIMATION_DURATION);

@@ -5,6 +5,7 @@
   --secondary: #4a4d57;
   --accent: #00ffc4;
   --text: #f9f9f9;
+  --text-muted: #c6cad4;
 }
 * {
   margin: 0;
@@ -33,7 +34,7 @@ h1 {
   color: var(--accent);
 }
 .subtitle {
-  color: #c6cad4;
+  color: var(--text-muted);
   margin-bottom: 30px;
   text-align: center;
 }
@@ -127,7 +128,7 @@ form {
 }
 .todo_summary,
 .empty_state {
-  color: #c6cad4;
+  color: var(--text-muted);
   font-size: 0.95rem;
 }
 .todo {
@@ -164,6 +165,9 @@ form {
   align-items: center;
   justify-content: center;
   display: flex;
+}
+.delete_btn:disabled {
+  cursor: not-allowed;
 }
 .delete_btn svg {
   transition: ease 300ms;

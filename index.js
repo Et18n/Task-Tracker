@@ -234,7 +234,7 @@ function loadState() {
 }
 
 function createTodoId() {
-  if (window.crypto?.randomUUID) {
+  if (window.crypto && window.crypto.randomUUID) {
     return window.crypto.randomUUID();
   }
 

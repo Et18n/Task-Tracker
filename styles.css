@@ -138,7 +138,7 @@ form {
   display: flex;
   align-items: center;
   box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
-  transition: transform 200ms ease, opacity 200ms ease, box-shadow 200ms ease;
+  transition: transform 220ms ease, opacity 220ms ease, box-shadow 220ms ease;
 }
 .todo:hover {
   transform: translateY(-2px);

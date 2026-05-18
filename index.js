@@ -1,5 +1,6 @@
 const STORAGE_KEY = "task-tracker-state";
 const FILTERS = ["all", "active", "completed"];
+const TODO_ANIMATION_DURATION = 220;
 
 const todoForm = document.querySelector("form");
 const todoInput = document.getElementById("todo_input");
@@ -58,9 +59,11 @@ function renderTodos(options = {}) {
       return;
     }
 
-    const shouldAnimate =
-      options.animateLastItem && todoIndex === allTodos.length - 1 && currentFilter !== "completed";
-    const todoItem = createTodoItem(todo, todoIndex, shouldAnimate);
+    const todoItem = createTodoItem(
+      todo,
+      todoIndex,
+      shouldAnimateTodo(todoIndex, options.animateLastItem)
+    );
     todoList.append(todoItem);
   });
 
@@ -147,6 +150,14 @@ function shouldRenderTodo(todo) {
   return true;
 }
 
+function shouldAnimateTodo(todoIndex, animateLastItem) {
+  if (!animateLastItem || currentFilter === "completed") {
+    return false;
+  }
+
+  return todoIndex === allTodos.length - 1;
+}
+
 function updateSummary() {
   const completedCount = allTodos.filter((todo) => todo.completed).length;
   const activeCount = allTodos.length - completedCount;
@@ -215,9 +226,9 @@ function loadState() {
 function deleteTodo(todoIndex, todoElement) {
   todoElement.classList.add("todo--removing");
 
-  window.setTimeout(() => {
+  setTimeout(() => {
     allTodos = allTodos.filter((_, index) => index !== todoIndex);
     saveState();
     renderTodos();
-  }, 180);
+  }, TODO_ANIMATION_DURATION);
 }

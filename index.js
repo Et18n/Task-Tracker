@@ -1,5 +1,6 @@
 const STORAGE_KEY = "task-tracker-state";
 const FILTERS = ["all", "active", "completed"];
+const DEFAULT_FILTER = "all";
 const TODO_ANIMATION_DURATION = 220;
 
 const todoForm = document.querySelector("form");
@@ -208,7 +209,7 @@ function loadState() {
   try {
     const savedState = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
     const legacyTodos = JSON.parse(localStorage.getItem("todos") || "[]");
-    const filter = FILTERS.includes(savedState.filter) ? savedState.filter : "all";
+    const filter = FILTERS.includes(savedState.filter) ? savedState.filter : DEFAULT_FILTER;
     let todos = [];
 
     if (Array.isArray(savedState.todos)) {
@@ -228,7 +229,7 @@ function loadState() {
   } catch (error) {
     return {
       todos: [],
-      filter: "all",
+      filter: DEFAULT_FILTER,
     };
   }
 }

@@ -8,18 +8,31 @@
   </head>
   <body>
     <h1>Task Tracker</h1>
+    <p class="subtitle">Keep track of today and pick up right where you left off.</p>
     <div class="wrapper">
       <form>
         <input
           type="text"
-          name=""
+          aria-label="Add a task"
           placeholder="Add Something"
           autocomplete="off"
           id="todo_input"
         />
-        <button id="add_btn">Add</button>
+        <button id="add_btn" type="submit">Add</button>
       </form>
-      <ul id="todo_list"></ul>
+      <div class="toolbar">
+        <div class="filters" aria-label="Filter tasks">
+          <button class="filter_btn" data-filter="all" type="button">All</button>
+          <button class="filter_btn" data-filter="active" type="button">Active</button>
+          <button class="filter_btn" data-filter="completed" type="button">Done</button>
+        </div>
+        <button class="secondary_btn" id="clear_completed_btn" type="button">
+          Clear completed
+        </button>
+      </div>
+      <p class="todo_summary" id="todo_summary" aria-live="polite"></p>
+      <ul id="todo_list" aria-live="polite"></ul>
+      <p class="empty_state" id="empty_state">No tasks yet. Add something to get started.</p>
     </div>
 
     <script src="index.js"></script>

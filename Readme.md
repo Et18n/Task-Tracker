@@ -8,9 +8,12 @@ Can manipulate tasks in the following ways:
 - Delete a task
 - Mark a task as done
 - Mark a task as not done
+- Persist tasks between sessions
 - View all tasks
 - View all tasks that are done
 - View all tasks that are not done
+- Clear completed tasks
+- Enjoy smoother task animations and a richer status summary
 
 ## Web app
 

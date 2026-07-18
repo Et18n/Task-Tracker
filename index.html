@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -7,33 +7,100 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <h1>Task Tracker</h1>
-    <p class="subtitle">Keep track of today and pick up right where you left off.</p>
-    <div class="wrapper">
-      <form>
-        <input
-          type="text"
-          aria-label="Add a task"
-          placeholder="Add Something"
-          autocomplete="off"
-          id="todo_input"
-        />
-        <button id="add_btn" type="submit">Add</button>
-      </form>
-      <div class="toolbar">
-        <div class="filters" aria-label="Filter tasks">
-          <button class="filter_btn" data-filter="all" type="button">All</button>
-          <button class="filter_btn" data-filter="active" type="button">Active</button>
-          <button class="filter_btn" data-filter="completed" type="button">Done</button>
+    <main class="app-shell">
+      <header class="app-header">
+        <div class="chrome-row">
+          <div class="chrome-chip">
+            <span id="current_month"></span>
+          </div>
+          <button
+            class="icon-button icon-button--accent"
+            id="create_sheet_btn"
+            type="button"
+            aria-label="Create a new book"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+          </button>
         </div>
-        <button class="secondary_btn" id="clear_completed_btn" type="button">
-          Clear completed
-        </button>
-      </div>
-      <p class="todo_summary" id="todo_summary" aria-live="polite"></p>
-      <ul id="todo_list" aria-live="polite"></ul>
-      <p class="empty_state" id="empty_state">No tasks yet. Add something to get started.</p>
-    </div>
+
+        <nav class="sheet-tabs" id="sheet_tabs" aria-label="Books"></nav>
+
+        <section class="sheet-banner" aria-label="Active book overview">
+          <div>
+            <p class="eyebrow">Active book</p>
+            <h1 id="sheet_title"></h1>
+            <p class="sheet-date" id="current_date"></p>
+          </div>
+          <div class="sheet-actions">
+            <button class="ghost-button" id="rename_sheet_btn" type="button">
+              Rename
+            </button>
+            <button class="ghost-button" id="delete_sheet_btn" type="button">
+              Delete
+            </button>
+          </div>
+        </section>
+
+        <div class="sheet-ordering">
+          <button
+            class="ghost-button ghost-button--tight"
+            id="move_sheet_left_btn"
+            type="button"
+          >
+            Move left
+          </button>
+          <button
+            class="ghost-button ghost-button--tight"
+            id="move_sheet_right_btn"
+            type="button"
+          >
+            Move right
+          </button>
+        </div>
+      </header>
+
+      <section class="task-card" aria-label="Tasks">
+        <form class="task-form">
+          <input
+            type="text"
+            aria-label="Add a task"
+            placeholder="Add a task"
+            autocomplete="off"
+            id="todo_input"
+          />
+          <button id="add_btn" type="submit">Add</button>
+        </form>
+
+        <div class="toolbar">
+          <div class="filters" aria-label="Filter tasks">
+            <button class="filter_btn" data-filter="all" type="button">
+              All
+            </button>
+            <button class="filter_btn" data-filter="active" type="button">
+              Active
+            </button>
+            <button class="filter_btn" data-filter="completed" type="button">
+              Done
+            </button>
+          </div>
+          <button class="secondary_btn" id="clear_completed_btn" type="button">
+            Clear completed
+          </button>
+        </div>
+
+        <p class="todo_summary" id="todo_summary" aria-live="polite"></p>
+        <ul id="todo_list" aria-live="polite"></ul>
+        <p class="empty_state" id="empty_state">
+          No tasks yet in this book. Add something to get started.
+        </p>
+      </section>
+    </main>
 
     <script src="index.js"></script>
   </body>

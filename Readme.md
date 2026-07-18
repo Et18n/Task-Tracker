@@ -4,6 +4,8 @@ Task tracking web app
 
 Can manipulate tasks in the following ways:
 
+- Create multiple books/tabs and switch between them
+- Rename, delete, and reorder books
 - Add a task
 - Delete a task
 - Mark a task as done
